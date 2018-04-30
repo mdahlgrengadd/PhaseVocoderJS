@@ -1,4 +1,20 @@
-var BUFFER_SIZE = 2048;
+let pulse;
+loadPulse()
+    .then(module => {
+        pulse = module;
+
+        loadSample('data/IMSLP310845-PMLP164349-bach_cellosuiteno1_carr.wav');
+
+        var dd = new DragAndDrop(document.getElementById('drop'));
+        dd.on('drop', loadSample);
+
+
+    }).catch(err => {
+        console.log("Error in loading module: ", err);
+    });
+
+
+var BUFFER_SIZE = 4096;
 
 var div = 1;
 
@@ -22,13 +38,13 @@ loadSample = function(url) {
             var I = nodes.length;
             var N = nodes[I] = context.createScriptProcessor(BUFFER_SIZE, 2, 2);
             masterNode.connect(nodes[I]);
-            eqs[I] = new Equalizer(nodes[I], context);
+            eqs[I] = nodes[I]
             N.buffer = decodedData;
-            N.pvL = new PhaseVocoder(BUFFER_SIZE/div, 44100); N.pvL.init();
-            N.pvR = new PhaseVocoder(BUFFER_SIZE/div, 44100); N.pvR.init();
+            N.pvL = new PhaseVocoder(BUFFER_SIZE/div, 48000); N.pvL.init();
+            N.pvR = new PhaseVocoder(BUFFER_SIZE/div, 48000); N.pvR.init();
             N.outBufferL = [];
             N.outBufferR = [];
-            N.position = 0;
+            N.position = 0; 
             N.pitch = 1;
             N.onaudioprocess = function (e) {
 
@@ -37,7 +53,6 @@ loadSample = function(url) {
 
                 var ol = e.outputBuffer.getChannelData(0);
                 var or = e.outputBuffer.getChannelData(1);
-
                 // Fill output buffers (left & right) until the system has 
                 // enough processed samples to reproduce.
                 do {
@@ -59,6 +74,7 @@ loadSample = function(url) {
 
                 ol.set(this.outBufferL.splice(0, BUFFER_SIZE));
                 or.set(this.outBufferR.splice(0, BUFFER_SIZE));
+                
             };
         });
     }
@@ -67,38 +83,38 @@ loadSample = function(url) {
     request.send();
 }
 
-// loadSample('../soundtouchjs/4.mp3');
-// loadSample('../soundtouchjs/2.mp3');
-// loadSample('../soundtouchjs/3.mp3');
-
 
 function set_pitch(newPitch) {
-    pitch = phasevocoderL1.get_synthesis_hop()*newPitch / phasevocoderL1.get_analysis_hop();
-    phasevocoderL1.set_overlap_factor(pitch);
-    phasevocoderR1.set_overlap_factor(pitch);
+    pitch = nodes[0].pvL.get_synthesis_hop() * newPitch / nodes[0].pvL.get_analysis_hop();
+    nodes[0].pvL.set_overlap_factor(pitch);
+    nodes[0].pvR.set_overlap_factor(pitch);
 }
 
-function set_alpha(ids, newFactor) {
-    for (var i=0; i<ids.length; i++) {
-        nodes[i].pvL.set_alpha(newFactor);
-        nodes[i].pvR.set_alpha(newFactor);
-    }
+function setAlpha(newFactor) {
+    
+        nodes[0].pvL.set_alpha(newFactor);
+        nodes[0].pvR.set_alpha(newFactor);
+    
 }
 
-function set_position(ids, newPosition) {
-    for (var i=0; i<ids.length; i++) {
-        nodes[i].position = newPosition;
-    }
+function setPosition(newPosition) {
+    
+        nodes[0].position = newPosition;
+    
 }
 
-function play(ids) {
-    for (var i=0; i<ids.length; i++) 
-        eqs[ids[i]].connect();
+function play() {
+    //for (var i=0; i<ids.length; i++) 
+    nodes[0].pvL.set_alpha(2);
+    nodes[0].pvR.set_alpha(2);
+    setPosition(0);
+    //set_pitch(0.5);
+    nodes[0].connect(context.destination);
 }
 
-function pause(ids) {
-    for (var i=0; i<ids.length; i++) 
-        eqs[ids[i]].disconnect();
+function pause() {
+    
+   nodes[0].disconnect();
 }
 
 

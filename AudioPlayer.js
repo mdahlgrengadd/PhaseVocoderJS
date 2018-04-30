@@ -14,7 +14,7 @@ function AudioPlayer(params) {
 	var _samplePosition = 0;
 	var _synSamplePosition = 0;
 	var _bufferSize = params.bufferSize || 4096;
-	var _sampleRate = params.sampleRate || 44100;
+	var _sampleRate = params.sampleRate || 48000;
 	var _div = params.div || 2;
 	var _pvL = new PhaseVocoder(_bufferSize/_div, _sampleRate); _pvL.init();
 	var _pvR = new PhaseVocoder(_bufferSize/_div, _sampleRate); _pvR.init();

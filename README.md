@@ -1,5 +1,3 @@
-Experimenting with wasm and asm.js and PhaseVocoder.js
-
 # PhaseVocoder.js
 
 A JavaScript implementation of the Phase Vocoder algorithm, with Identity Phase Locking, to perform time stretching. This implementation is independent of the Web Audio API but each time stretcher instance can be integrated in a ScriptProcessor or AudioWorker node.

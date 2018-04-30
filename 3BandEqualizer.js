@@ -1,4 +1,4 @@
-function 3BandEqualizer(audioSource, context) {
+function Equalizer(audioSource, context) {
 
   var gain_node = context.createGain();
   gain_node.gain.value = 1;

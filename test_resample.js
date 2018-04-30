@@ -6,7 +6,7 @@ var buffer = context.createBuffer(2, BUFFER_SIZE, context.sampleRate);
 
 var node = context.createScriptProcessor(BUFFER_SIZE, 2, 2);
 
-var alpha = 1;
+var alpha = 0.7;
 
 var meuOut;
 
@@ -36,7 +36,7 @@ function createBuffer(arrayBuffer) {
     console.log('loaded audio in ' + (new Date() - start));
 }
 
-loadSample('../soundtouchjs/2.mp3');
+loadSample('Piano.wav');
 
 var position = 0;
 
