@@ -2,7 +2,7 @@ var Module = {};
 
 loadPulse = () => {
   return new Promise((resolve, reject) => {
-    fetch('libs/pulse/src/wasmkissfft.wasm')
+    fetch('libs/pulse/src/WASMkissFFT.wasm')
     .then(console.log("made it into loadpulse"))
       .then(response => response.arrayBuffer())
       .then(console.log("step into m"))
