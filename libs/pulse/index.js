@@ -2,7 +2,7 @@ var Module = {};
 
 loadPulse = () => {
   return new Promise((resolve, reject) => {
-    fetch('pulse/src/wasmkissfft.wasm')
+    fetch('libs/pulse/src/wasmkissfft.wasm')
     .then(console.log("made it into loadpulse"))
       .then(response => response.arrayBuffer())
       .then(console.log("step into m"))
@@ -10,7 +10,7 @@ loadPulse = () => {
         Module.wasmBinary = m;
 
         script = document.createElement('script');
-        script.src = 'pulse/src/wasmkissfft.js';
+        script.src = 'libs/pulse/src/wasmkissfft.js';
         script.type='text/javascript';
         script.onload = () => {
           console.log("Loaded Emscripten.");
